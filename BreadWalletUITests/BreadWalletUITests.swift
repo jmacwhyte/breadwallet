@@ -26,6 +26,10 @@ import XCTest
 
 class BreadWalletUISnapshot: XCTestCase {
     
+    // Set to true when creating screenshots. TODO: Once the main app is converted to swift, we
+    // can control this with global variabes together with the setting for testnet mode.
+    let snapshot_mode = false
+    
     override func setUp() {
         super.setUp()
         
@@ -42,17 +46,19 @@ class BreadWalletUISnapshot: XCTestCase {
     
     func testTakeScreenshots() {
         
-        let app = XCUIApplication()
-        snapshot("1")
-        
-        app.childrenMatchingType(.Window).elementBoundByIndex(0).tap()
-        snapshot("3")
-        
-        app.pageIndicators.elementBoundByIndex(0).tap()
-        snapshot("2")
-        
-        app.navigationBars.buttons["burger"].tap()
-        snapshot("4")
+        if (snapshot_mode) {
+            let app = XCUIApplication()
+            snapshot("1")
+            
+            app.childrenMatchingType(.Window).elementBoundByIndex(0).tap()
+            snapshot("3")
+            
+            app.pageIndicators.elementBoundByIndex(0).tap()
+            snapshot("2")
+            
+            app.navigationBars.buttons["burger"].tap()
+            snapshot("4")
+        }
         
     }
     
