@@ -100,7 +100,7 @@ static const struct { uint32_t height; const char *hash; uint32_t timestamp; uin
 };
 
 static const char *dns_seeds[] = {
-    "seed.breadwallet.com.", "seed.bitcoin.sipa.be.", "dnsseed.bluematt.me.", "dnsseed.bitcoin.dashjr.org.",
+    "testseed.breadwallet.com.", "seed.bitcoin.sipa.be.", "dnsseed.bluematt.me.", "dnsseed.bitcoin.dashjr.org.",
     "seed.bitcoinstats.com.", "bitseed.xf2.org.", "seed.bitcoin.jonasschnelli.ch."
 };
 
@@ -195,6 +195,13 @@ static const char *dns_seeds[] = {
 
 - (NSMutableOrderedSet *)peers
 {
+    
+# ifdef LOCAL_ONLY
+    NSMutableOrderedSet *hardPeer = [NSMutableOrderedSet new];
+    UInt128 addr = { .u32 = { 0, 0, CFSwapInt32HostToBig(0xffff), CFSwapInt32HostToBig(2130706433) } };
+    [hardPeer addObject:[[BRPeer alloc] initWithAddress:addr andPort:8333]];
+    return hardPeer;
+# endif
     if (_peers.count >= PEER_MAX_CONNECTIONS) return _peers;
 
     @synchronized(self) {
